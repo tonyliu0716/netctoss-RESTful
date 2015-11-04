@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ 
+<mapper namespace="org.tarena.netctoss.dao.CostMapperDao">
+	<select id="findAll" resultType="org.tarena.netctoss.entity.Cost">
+		select * from nerdluv.Cost order by id
+	</select>
+	
+	<delete id="deleteByID" parameterType="int">
+		delete from nerdluv.Cost where id=#{id}
+	</delete>
+	
+	<insert id="save" parameterType="org.tarena.netctoss.entity.Cost">
+		insert into nerdluv.COST 
+		(name, base_duration, base_cost,unit_cost,status, descr, creatime, startime, cost_type) 
+		values(
+		#{name}, #{base_duration,jdbcType=VARCHAR},#{base_cost,jdbcType=NUMERIC},#{unit_cost,jdbcType=NUMERIC},'0',#{descr,jdbcType=VARCHAR},DEFAULT,null,#{cost_type})
+	</insert>
+	
+	<select id="findById" parameterType="int" resultType="org.tarena.netctoss.entity.Cost">
+		select * from nerdluv.Cost where id=#{id}
+	</select>
+	
+	<update id="updateCost" parameterType="org.tarena.netctoss.entity.Cost">
+		update nerdluv.Cost set name=#{name}, cost_type=#{cost_type}, base_duration=#{base_duration,jdbcType=NUMERIC},
+		base_cost=#{base_cost,jdbcType=NUMERIC}, unit_cost=#{unit_cost,jdbcType=NUMERIC}, descr=#{descr,jdbcType=VARCHAR} where id=#{id}
+	</update>
+	
+	<update id="updateStatus" parameterType="int">
+		update nerdluv.Cost set status='1' where id=#{id}
+	</update>
+	
+	<select id="findPage" parameterType="int" resultType="org.tarena.netctoss.entity.Cost">
+		select * from nerdluv.Cost order by id limit #{pageNum},3
+	</select>
+	
+	<select id="countCost" resultType="int">
+		select count(*) from nerdluv.Cost
+	</select>
+	
+	<select id="monthly" resultType="org.tarena.netctoss.entity.Cost" parameterType="int">
+		select * from nerdluv.Cost order by name+0 desc limit #{start},3
+	</select>
+	
+	<select id="monthlySortAsc" resultType="org.tarena.netctoss.entity.Cost" parameterType="int">
+		select * from nerdluv.cost order by name+0 asc limit #{start},3
+	</select>
+	
+	<select id="baseSortAsc" resultType="org.tarena.netctoss.entity.Cost" parameterType="int">
+		select * from nerdluv.cost order by base_cost asc limit #{start},3
+	</select>
+	
+	<select id="baseSortDesc" resultType="org.tarena.netctoss.entity.Cost" parameterType="int">
+		select * from nerdluv.cost order by base_cost desc limit #{start},3
+	</select>
+	
+	<select id="durationSortAsc" resultType="org.tarena.netctoss.entity.Cost" parameterType="int">
+		select * from nerdluv.cost order by base_duration asc limit #{start},3
+	</select>
+	
+	<select id="durationSortDesc" resultType="org.tarena.netctoss.entity.Cost" parameterType="int">
+		select * from nerdluv.cost order by base_duration desc limit #{start},3
+	</select>
+	
+	<select id="findByName" parameterType="java.lang.String" resultType="Integer">
+		select id from nerdluv.cost where name=#{name}
+	</select>
+</mapper>

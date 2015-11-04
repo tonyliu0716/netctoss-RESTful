@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ 
+<mapper namespace="org.tarena.netctoss.dao.AccountMapperDao">
+	
+	<select id="findByCondition" resultType="org.tarena.netctoss.entity.Account" 
+	parameterType="org.tarena.netctoss.entity.AccountPage">
+		select * from nerdluv.Account 
+		<where>
+			<if test='!"*".equals(idcard_no)'>idcard_no=#{idcard_no}</if>
+			<if test='!"*".equals(real_name)'>and real_name=#{real_name}</if>
+			<if test='!"*".equals(login_name)'>and login_name=#{login_name}</if>
+			<if test='!"-1".equals(status)'>and status=#{status}</if>
+		</where>
+		order by id limit #{page},3
+	</select>
+	
+	<select id="countByCondition" resultType="Integer" parameterType="org.tarena.netctoss.entity.AccountPage">
+		select count(*) from nerdluv.Account 
+		<where>
+			<if test='!"*".equals(idcard_no)'>idcard_no=#{idcard_no}</if>
+			<if test='!"*".equals(real_name)'>and real_name=#{real_name}</if>
+			<if test='!"*".equals(login_name)'>and login_name=#{login_name}</if>
+			<if test='!"-1".equals(status)'>and status=#{status}</if>
+		</where>
+		order by id
+	</select>
+	
+	<select id="findByPage" resultType="org.tarena.netctoss.entity.Account" 
+	parameterType="Integer">
+		select * from nerdluv.Account order by id limit #{page},3
+	</select>
+	
+	<select id="countAll" resultType="Integer">
+		select count(*) from nerdluv.Account
+	</select>
+</mapper>

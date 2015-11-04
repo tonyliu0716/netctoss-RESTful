@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ 
+<mapper namespace="org.tarena.netctoss.dao.RoleMapperDao">
+	
+	<select id="findAll1" resultType="org.tarena.netctoss.entity.Role">
+		select * from nerdluv.Role
+	</select>
+	
+	
+	<select id="findAll" resultMap="selectPrivilege" parameterType="java.util.Map">
+		select r.id, r.name, p.role_id, p.privilege_id 
+			from nerdluv.Role r left outer join 
+				nerdluv.ROLE_PRIVILEGE p on (r.id=p.role_id) where r.id &gt;=#{begin} and r.id &lt;=#{end} 
+	</select>
+	
+	<resultMap id="selectPrivilege" type="org.tarena.netctoss.entity.Role">
+		<id property="id" column="ID"/>
+		<result property="name" column="NAME"/>
+		<collection property="privileges" 
+			ofType="org.tarena.netctoss.entity.Role_privilege" 
+			javaType="ArrayList">
+			<result property="role_id" column="ROLE_ID"/>
+			<result property="privilege_id" column="PRIVILEGE_ID"/>
+		</collection>
+	</resultMap>
+	
+	<select id="countAll" resultType="Integer">
+		select count(*) from nerdluv.role
+	</select>
+	
+	<insert id="insertOne" parameterType="org.tarena.netctoss.entity.Role">
+		insert into nerdluv.role values(#{id}, #{name})
+	</insert>
+	
+	<insert id="insertPrivilege" parameterType="org.tarena.netctoss.entity.Role_privilege">
+		insert into nerdluv.role_privilege values(#{role_id}, #{privilege_id})
+	</insert>
+	
+	<delete id="deleteOneRole" parameterType="Integer">
+		delete from nerdluv.role where id=#{id}
+	</delete>
+	
+	<delete id="deleteOneRP" parameterType="Integer">
+		delete from nerdluv.ROLE_PRIVILEGE where role_id = #{id}
+	</delete>
+	
+	<update id="updateRole" parameterType="java.util.Map">
+		update nerdluv.Role set id=#{old_id} where id=#{new_id}
+	</update>
+	
+	<update id="updateRp" parameterType="java.util.Map">
+		update nerdluv.Role_privilege set role_id=#{old_id} where role_id=#{new_id}
+	</update>
+	
+	<select id="findById" resultMap="selectP" parameterType="Integer">
+		select r.id, r.name, p.role_id, p.privilege_id 
+			from nerdluv.Role r left outer join 
+				nerdluv.ROLE_PRIVILEGE p on (r.id=p.role_id) where r.id=#{id} 
+	</select>
+	
+	<resultMap id="selectP" type="org.tarena.netctoss.entity.Role">
+		<id property="id" column="ID"/>
+		<result property="name" column="NAME"/>
+		<collection property="privileges" 
+			ofType="org.tarena.netctoss.entity.Role_privilege" 
+			javaType="ArrayList">
+			<result property="role_id" column="ROLE_ID"/>
+			<result property="privilege_id" column="PRIVILEGE_ID"/>
+		</collection>
+	</resultMap>
+	
+	<update id="updateById" parameterType="java.util.Map">
+		update nerdluv.Role set name=#{name} where id=#{id}
+	</update>
+	
+	<delete id="deleteRP" parameterType="Integer">
+		delete from nerdluv.role_privilege where role_id=#{id}
+	</delete>
+	
+	<insert id="insertRP" parameterType="org.tarena.netctoss.entity.Role_privilege">
+		insert into nerdluv.role_privilege values(#{role_id}, #{privilege_id});
+	</insert>
+</mapper>

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ 
+<mapper namespace="org.tarena.netctoss.dao.AdminMapperDao">
+	<select id="findByAdminCodeAndPwd" parameterType="org.tarena.netctoss.entity.AdminInfo" resultType="int">
+		select count(*) from nerdluv.admin_info where admin_code=#{admin_code} and password=#{password}
+	</select>
+	
+	<select id="findByCondition" parameterType="org.tarena.netctoss.vo.AdminInfoPage" 
+		resultMap="adminMap">
+		select distinct a.ID,
+          a.NAME,
+          a.ADMIN_CODE,
+          a.TELEPHONE,
+          a.EMAIL,
+          a.ENROLLDATE,
+          r.NAME ROLE_NAME
+		from nerdluv.ROLE r, nerdluv.ADMIN_INFO a, nerdluv.ROLE_PRIVILEGE rp, nerdluv.ADMIN_ROLE ar
+     	where r.id=rp.role_id 
+         and r.id=ar.role_id
+         and ar.admin_id=a.id
+		<if test='!priId.equals(-1)'>
+			 and rp.privilege_id=#{priId}
+		</if>
+       <if test='!"*".equals(rolename)'>
+       		and r.name=#{rolename}
+       </if>
+        
+	</select>
+	
+	<resultMap id="adminMap" type="org.tarena.netctoss.entity.AdminInfo">
+		<id property="id" column="id"/>
+		<result property="admin_code" column="admin_code"/>
+		<result property="name" column="name"/>
+		<result property="telephone" column="telephone"/>
+		<result property="email" column="email"/>
+		<result property="enrolldate" column="enrolldate"/>
+		<collection property="roles" ofType="org.tarena.netctoss.entity.Role">
+			<result property="name" column="role_name"/>
+		</collection>
+	</resultMap>
+</mapper>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ 
+<mapper namespace="org.tarena.netctoss.dao.ServiceMapperDao">
+	
+	<select id="findByCondition" parameterType="org.tarena.netctoss.entity.ServicePage" resultType="org.tarena.netctoss.vo.ServiceLine">
+		select s.id, s.account_id, a.idcard_no, a.real_name, s.os_username, s.status, s.unix_host, c.name cost_name,
+		 c.descr cost_descr 
+		from nerdluv.SERVICE s join nerdluv.account a on (s.account_id=a.id) join nerdluv.cost c on(s.cost_id=c.id) 
+		<where>
+			<if test='!"*".equals(osusername)'>
+				s.os_username=#{osusername}
+			</if>
+			<if test='!"*".equals(unixhost)'>
+				and s.unix_host=#{unixhost}
+			</if>
+			<if test='!"*".equals(idcardno)'>
+				and a.idcard_no=#{idcardno}
+			</if>
+			<if test='!"-1".equals(status)'>
+				and s.status=#{status}
+			</if>
+		</where>
+	</select> 
+</mapper>
